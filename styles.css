@@ -1,0 +1,17 @@
+#layer-container {
+    border  : 1px solid black;
+    display : inline-block;
+    position: relative;
+}
+
+#layer-container,
+#layer-container canvas {
+    height  : 500px;
+    width   : 500px;
+}
+
+#layer-container canvas {
+    left    : 0;
+    position: absolute;
+    top     : 0;
+}
