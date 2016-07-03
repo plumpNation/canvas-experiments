@@ -1,5 +1,6 @@
 (function () {
     let playing = false;
+    let previousPoint;
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -38,12 +39,7 @@
             let rdm1 = Math.floor(Math.random() * 500);
             let rdm2 = Math.floor(Math.random() * 500);
 
-            outline('layer1', [
-                {x: rdm1,   y: rdm1},
-                {x: rdm2, y: rdm1},
-                {x: rdm2, y: rdm2},
-                {x: rdm1,   y: rdm2}
-            ]);
+            drawLine('layer1', {x: rdm1,   y: rdm2});
         });
     }
 
@@ -61,34 +57,25 @@
         requestAnimationFrame(() => tick(fn));
     }
 
-    function outline(contextId, corners, color = 'red') {
+    function drawLine(contextId, point, color = 'red') {
         let context = document.getElementById(contextId).getContext('2d');
 
-        context.strokeStyle = color;
-        context.fillStyle   = 'red';
-
-        context.beginPath();
-
-        for (let j = 0; j < corners.length; ++j) {
-            let nextCorner;
-            let corner = corners[j];
-
-            context.moveTo(corner.x, corner.y);
-
-            if (j === corners.length - 1) {
-                nextCorner = corners[0];
-
-            } else {
-                nextCorner = corners[j + 1];
-            }
-
-            context.lineTo(nextCorner.x, nextCorner.y);
+        if (!previousPoint) {
+            previousPoint = {
+                'x': 0,
+                'y': 0
+            };
         }
 
-        context.closePath();
+        context.strokeStyle = color;
+        context.lineWidth   = '1';
 
+        context.beginPath();
+        context.moveTo(previousPoint.x, previousPoint.y);
+        context.lineTo(point.x, point.y);
         context.stroke();
-        context.fill();
+
+        previousPoint = point;
     }
 
     function createCanvasLayer(layerId) {
