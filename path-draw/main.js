@@ -3,6 +3,15 @@
 
     document.addEventListener('DOMContentLoaded', init);
 
+    function init() {
+        let background = createCanvasLayer('background');
+        let layer1     = createCanvasLayer('layer1');
+
+        inheritDimensionsFromCSS('canvas');
+
+        setupPlayButton();
+    }
+
     function setupPlayButton() {
         let playButton = document.getElementById('play-button');
         let eval = () => {
@@ -42,21 +51,14 @@
         playing = false;
     }
 
-    function init() {
-        let background = createCanvasLayer('background');
-        let layer1     = createCanvasLayer('layer1');
-
-        inheritDimensionsFromCSS('canvas');
-
-        setupPlayButton();
-    }
-
     function tick(fn) {
+        if (!playing) {
+            return;
+        }
+
         fn();
 
-        if (playing) {
-            requestAnimationFrame(() => tick(fn));
-        }
+        requestAnimationFrame(() => tick(fn));
     }
 
     function outline(contextId, corners, color = 'red') {
